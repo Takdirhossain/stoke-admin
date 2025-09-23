@@ -1,0 +1,104 @@
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useState } from 'react';
+import columnsDef from './components/Column';
+import AddModal from './components/AddModal';
+import { DataTable } from '@/components/common/data-table';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import API from '@/config/config';
+import Swal from 'sweetalert2';
+import toast from 'react-hot-toast';
+import { useDebounce } from '@/lib/utils';
+
+export default function Customer() {
+  const [openModal, setOpenModal] = useState(false);
+  const [singleData, setSingleData] = useState(null);
+  const [page, setPage] = useState(1);
+  const [parPage, setParPage] = useState(20);
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearch = useDebounce(searchTerm, 500);
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['customer', page, debouncedSearch],
+    queryFn: async () => {
+      const response = await API.put(`api/customers`, {
+        params: {
+          page,
+          per_page: parPage,
+          search: debouncedSearch,
+        },
+      });
+      return response.data;
+    },
+    keepPreviousData: true,
+    refetchOnWindowFocus: false,
+  });
+
+  const constHandelDelete = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This action cannot be undone!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        toast.promise(
+          API.delete(`/admin/categories/${id}`),
+          {
+            loading: 'Deleting...',
+            success: (data) => data.message || 'Deleted successfully!',
+            error: (error) => error.response.data.message,
+          }
+        );
+        queryClient.invalidateQueries({ queryKey: ['categories'] });
+      }
+    });
+  };
+
+  return (
+    <>
+      <div className="w-full">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-semibold">Customer Management</h2>
+            <p className="text-sm text-muted-foreground">Manage your Customer</p>
+          </div>
+          <Button onClick={() => setOpenModal(true)}>Add Customer</Button>
+        </div>
+
+        <div className="py-6">
+ 
+
+          <div className="overflow-hidden rounded-md">
+            <DataTable
+              columns={columnsDef({ setSingleData, constHandelDelete, setOpenModal })}
+              data={data?.data?.customers?.data ?? []}
+              links={data?.data?.customers?.links ?? []}
+              setPage={setPage}
+              page={page}
+              isLoading={isLoading}
+              isError={isError}
+              error={error}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+            />
+          </div>
+        </div>
+      </div>
+
+      {openModal && (
+        <AddModal
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          title={singleData?.id ? 'Edit Customer' : 'Add Customer'}
+          singleData={singleData}
+          setSingleData={setSingleData}
+        />
+      )}
+    </>
+  );
+}
