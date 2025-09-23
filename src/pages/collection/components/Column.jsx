@@ -1,11 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown, Edit, Printer, SquarePen, Trash } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import EditModal from './EditStoke';
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Settings2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import EditCollection from './EditCollection';
 
 const columns = ({ constHandelDelete }) => [
   {
@@ -16,9 +14,8 @@ const columns = ({ constHandelDelete }) => [
   {
     id: 'customer',
     header: () => <div className='text-center'>Customer</div>,
-    cell: ({ row }) => <div className='text-center'>{row.original.customer?.name || row.original.customer_name || "N/A"}</div>,
+    cell: ({ row }) => <div className='text-center'>{row.original.customer?.name || row.original.customer_name || 'N/A'}</div>,
   },
-
 
   {
     accessorKey: 'pay',
@@ -37,34 +34,30 @@ const columns = ({ constHandelDelete }) => [
   {
     id: 'actions',
     header: () => <div className='text-center'>Actions</div>,
-    cell: ({ row }) => (
-      <div className='flex justify-center items-center'>
-        <ToggleGroup variant='outline' type='single'>
-          <ToggleGroupItem className='cursor-pointer' value='delete' aria-label='Delete row' onClick={() => constHandelDelete(row.original.id)}>
-            <Trash width={20} height={20} />
-          </ToggleGroupItem>
+    cell: ({ row }) => {
+      const [data, setData] = useState(null);
+      return (
+        <div className='flex justify-center items-center'>
+          <ToggleGroup variant='outline' type='single'>
+            <ToggleGroupItem className='cursor-pointer' value='delete' aria-label='Delete row' onClick={() => constHandelDelete(row.original.id)}>
+              <Trash width={20} height={20} />
+            </ToggleGroupItem>
 
-          <ToggleGroupItem
-            className="cursor-pointer"
-            value="settings"
-            aria-label="Customer details"
-          >
-            <Link to={`/admin/stoke/${row.original.id}`}>
-            <Edit width={20} height={20} />
-            </Link>
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            className="cursor-pointer"
-            value="settings"
-            aria-label="Customer details"
-          >
-            <Link to={`/admin/stoke/${row.original.id}`}>
-            <Printer width={20} height={20} />
-            </Link>
-          </ToggleGroupItem>
-        </ToggleGroup>
-      </div>
-    ),
+            <ToggleGroupItem value='edit' aria-label='Edit user' onClick={() => setData(row?.original)}>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button>
+                    {' '}
+                    <SquarePen width={20} height={20} />
+                  </button>
+                </DialogTrigger>
+                {data && <EditCollection data={data} />}
+              </Dialog>
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+      );
+    },
   },
 ];
 

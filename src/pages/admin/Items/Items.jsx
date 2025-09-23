@@ -76,8 +76,8 @@ export default function Items() {
           <div className="overflow-hidden rounded-md">
             <DataTable
               columns={columnsDef({ setSingleData, constHandelDelete, setOpenModal })}
-              data={data?.data?.customers?.data ?? []}
-              links={data?.data?.customers?.links ?? []}
+              data={data?.data?.data ?? []}
+              links={data?.data?.links ?? []}
               setPage={setPage}
               page={page}
               isLoading={isLoading}

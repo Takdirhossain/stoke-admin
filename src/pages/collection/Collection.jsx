@@ -20,7 +20,7 @@ export default function Collection() {
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['products', page, searchTerm],
+    queryKey: ['collection', page, searchTerm],
     queryFn: async () => {
       const response = await API.put(`api/sales/collectionList`, {
         params: {

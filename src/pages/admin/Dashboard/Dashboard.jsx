@@ -205,7 +205,7 @@ export default function Dashboard() {
                 <TableRow key={order.id}>
                   <TableCell className='font-medium'>{order.id}</TableCell>
                   <TableCell>{order.customer_name}</TableCell>
-                  <TableCell>{order?.is_due_bill == 1 ? <Badge className='bg-red-100 text-red-700 hover:bg-red-200'>Due Bill</Badge> : <Badge className='bg-green-100 text-green-700 hover:bg-green-200'>Purchase Bill</Badge>}</TableCell>
+                  <TableCell>{order?.is_due_bill == 1 ? <Badge className='bg-red-100 text-red-700 hover:bg-red-200'>Due Bill</Badge> : <Badge className='bg-green-100 text-green-700 hover:bg-green-200'>Purchase</Badge>}</TableCell>
 
                   <TableCell>{order.pay}</TableCell>
                   <TableCell>{order.date}</TableCell>

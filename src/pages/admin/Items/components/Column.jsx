@@ -5,6 +5,7 @@ import EditModal from './EditModal';
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Link } from 'react-router-dom';
+import { API_URL } from '@/config/config';
 
 const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
   {
@@ -16,90 +17,38 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
   },
   {
     accessorKey: 'name',
-    header: () => <div className="flex justify-center items-center">Name</div>,
+    header: () => <div className="">Name</div>,
     cell: ({ row }) => (
-      <div className="justify-center items-center text-center">
+      <div className="">
         {row.getValue('name')}
       </div>
     ),
   },
   {
-    accessorKey: 'total_purchase',
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Total Buy
-        <ArrowUpDown />
-      </Button>
-    ),
-    cell: ({ row }) => <div>{row.getValue('total_purchase')} TK</div>,
+    accessorKey: 'price',
+    header: () => <div className="">Price</div>,
+    cell: ({ row }) => <div>{row.getValue('price')} TK</div>,
   },
   {
-    accessorKey: 'total_paid',
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Total Pay
-        <ArrowUpDown />
-      </Button>
-    ),
-    cell: ({ row }) => <div>{row.getValue('total_paid')} TK</div>,
+    accessorKey: 'type',
+    header: () => <div className="">Type</div>,
+    cell: ({ row }) =>{
+      let data = row?.original?.is_cylinder
+      console.log(data);
+      return <div>{data == true? 'Cylinder' : 'Accessories'}</div>
+    },
   },
   {
-    accessorKey: 'total_due',
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Total Due
-        <ArrowUpDown />
-      </Button>
-    ),
-    cell: ({ row }) => <div>{row.getValue('total_due')} TK</div>,
+    accessorKey: 'image',
+    header: () => <div className="">Image</div>,
+    cell: ({ row }) =>{
+      let data = row?.original?.image
+      console.log(data);
+      return <div><img className='w-20 h-20' src={ API_URL + "/" + data} alt="" /></div>
+    },
   },
 
-  // 🔹 Cylinder variants using accessorFn
-  {
-    header: '12 KG',
-    accessorFn: (row) =>
-      `${row.purchase_cylinders?.twelve_kg || 0}/${row.empty_cylinders?.empty_twelve_kg || 0}`,
-    cell: ({ getValue }) => <div>{getValue()}</div>,
-  },
-  {
-    header: '25 KG',
-    accessorFn: (row) =>
-      `${row.purchase_cylinders?.twentyfive_kg || 0}/${row.empty_cylinders?.empty_twentyfive_kg || 0}`,
-    cell: ({ getValue }) => <div>{getValue()}</div>,
-  },
-  {
-    header: '33 KG',
-    accessorFn: (row) =>
-      `${row.purchase_cylinders?.thirtythree_kg || 0}/${row.empty_cylinders?.empty_thirtythree_kg || 0}`,
-    cell: ({ getValue }) => <div>{getValue()}</div>,
-  },
-  {
-    header: '35 KG',
-    accessorFn: (row) =>
-      `${row.purchase_cylinders?.thirtyfive_kg || 0}/${row.empty_cylinders?.empty_thirtyfive_kg || 0}`,
-    cell: ({ getValue }) => <div>{getValue()}</div>,
-  },
-  {
-    header: '45 KG',
-    accessorFn: (row) =>
-      `${row.purchase_cylinders?.fourtyfive_kg || 0}/${row.empty_cylinders?.empty_fourtyfive_kg || 0}`,
-    cell: ({ getValue }) => <div>{getValue()}</div>,
-  },
-  {
-    header: 'Others',
-    accessorFn: (row) =>
-      `${row.purchase_cylinders?.others_kg || 0}/${row.empty_cylinders?.empty_others_kg || 0}`,
-    cell: ({ getValue }) => <div>{getValue()}</div>,
-  },
+
 
   {
     id: 'actions',

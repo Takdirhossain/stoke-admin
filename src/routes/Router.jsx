@@ -5,6 +5,7 @@ import Details from '@/pages/admin/details/Details';
 import Inactive from '@/pages/admin/inactive/Inactive';
 import Items from '@/pages/admin/Items/Items';
 import AddSale from '@/pages/admin/sale/components/AddSale';
+import EditSale from '@/pages/admin/sale/components/EditSale';
 import Sale from '@/pages/admin/sale/Sale';
 import AddStoke from '@/pages/admin/stoke/components/AddStoke';
 import EditStoke from '@/pages/admin/stoke/components/EditStoke';
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
       {
         path:"sale/add",
         element:<AddSale/>
+      },
+      {
+        path:"sale/:id",
+        element:<EditSale/>
       },
       {
         path:"collection",

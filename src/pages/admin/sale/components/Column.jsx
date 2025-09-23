@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown, Edit, Printer, SquarePen, Trash } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import EditModal from './EditStoke';
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Settings2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useStore from '@/store/Store';
+import { useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
+import Invoice from '@/components/Invoice';
 
 const columns = ({ constHandelDelete }) => [
   {
@@ -131,35 +131,62 @@ const columns = ({ constHandelDelete }) => [
   {
     id: 'actions',
     header: () => <div className='text-center'>Actions</div>,
-    cell: ({ row }) => (
-      <div className='flex justify-center items-center'>
-        <ToggleGroup variant='outline' type='single'>
-          <ToggleGroupItem className='cursor-pointer' value='delete' aria-label='Delete row' onClick={() => constHandelDelete(row.original.id)}>
-            <Trash width={20} height={20} />
-          </ToggleGroupItem>
+    cell: ({ row }) => {
+      const { setSale } = useStore();
+      const navigate = useNavigate();
+      const invoiceRef = useRef();
 
-          <ToggleGroupItem
-            className="cursor-pointer"
-            value="settings"
-            aria-label="Customer details"
-          >
-            <Link to={`/admin/stoke/${row.original.id}`}>
-            <Edit width={20} height={20} />
-            </Link>
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            className="cursor-pointer"
-            value="settings"
-            aria-label="Customer details"
-          >
-            <Link to={`/admin/stoke/${row.original.id}`}>
-            <Printer width={20} height={20} />
-            </Link>
-          </ToggleGroupItem>
-        </ToggleGroup>
-      </div>
-    ),
-  },
+      const handlePrint = useReactToPrint({
+        content: () => invoiceRef.current,
+        documentTitle: `Invoice_${row.original.id}`,
+        pageStyle: '@media print { body { -webkit-print-color-adjust: exact; } }',
+      });
+
+      const handaleEdit = (data) => {
+        setSale(data);
+        navigate(`/admin/sale/${data.id}`);
+      }
+
+      return (
+        <div className='flex justify-center items-center'>
+  {/* Hidden Invoice for printing */}
+  <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+    <Invoice ref={invoiceRef} sale={row.original} />
+  </div>
+
+  <ToggleGroup variant='outline' type='single'>
+    <ToggleGroupItem
+      className='cursor-pointer'
+      value='delete'
+      aria-label='Delete row'
+      onClick={() => constHandelDelete(row.original.id)}
+    >
+      <Trash width={20} height={20} />
+    </ToggleGroupItem>
+
+    <ToggleGroupItem
+      className="cursor-pointer"
+      value="edit"
+      aria-label="Edit row"
+      onClick={() => handaleEdit(row.original)}
+    >
+      <Edit width={20} height={20} />
+    </ToggleGroupItem>
+
+    <button
+      className="cursor-pointer"
+      value="print"
+      aria-label="Print Invoice"
+      onClick={handlePrint}
+    >
+      <Printer width={20} height={20} />
+    </button>
+  </ToggleGroup>
+</div>
+
+      )
+    },
+  }
 ];
 
 export default columns;
