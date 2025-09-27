@@ -18,7 +18,7 @@ export default function AddModal({ openModal, setOpenModal, title, singleData, s
     reset,
     formState: { errors, isSubmitting },
   } = useForm();
-const [isCylinder, setIsCylinder] = useState(false);
+  const [isCylinder, setIsCylinder] = useState(false);
   const queryClient = useQueryClient();
 
   const onSubmit = async (data) => {
@@ -26,19 +26,19 @@ const [isCylinder, setIsCylinder] = useState(false);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('price', data.price);
+    formData.append('description', data.description);
     formData.append('is_cylinder', data.is_cylinder);
     if (data.picture && data.picture[0]) {
-      formData.append('image', data.picture[0]); 
+      formData.append('image', data.picture[0]);
     }
 
-    console.log(formData)
     await toast.promise(API.post('/api/items', formData), {
       loading: 'Saving...',
       success: 'Customer saved successfully!',
       error: (error) => error.response?.data?.message || 'Something went wrong',
     });
 
-    queryClient.invalidateQueries({ queryKey: ['customer'] });
+    queryClient.invalidateQueries({ queryKey: ['items'] });
     reset();
     setSingleData(null);
     setOpenModal(false);
@@ -47,13 +47,16 @@ const [isCylinder, setIsCylinder] = useState(false);
   return (
     <Modal open={openModal} onOpenChange={setOpenModal} title={title ?? ''} onClose={() => setSingleData(null)} className='lg:min-w-1/4 min-w-md'>
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-        {/* Category Name */}
         <div className='mt-4'>
           <InputField label='Items Name' id='name' type='text' placeholder='name' register={register} error={errors.name} validation={{ required: 'Customer Name is required' }} />
         </div>
 
         <div className='mt-4'>
           <InputField label='Price' id='price' type='number' placeholder='price' register={register} validation={{ required: 'Price is required' }} error={errors.price} />
+        </div>
+        <div className='mt-4'>
+          <Label htmlFor='address'>Description</Label>
+          <Textarea className="mt-2" {...register('description')} />
         </div>
         <div className='flex items-center space-x-2'>
           <Switch checked={isCylinder} onCheckedChange={setIsCylinder} id='airplane-mode' />
@@ -63,12 +66,6 @@ const [isCylinder, setIsCylinder] = useState(false);
           <InputField label='Picture' id='picture' type='file' placeholder='picture' register={register} validation={{ required: 'Picture is required' }} error={errors.picture} />
         </div>
 
-        <div className='mt-4'>
-          <Label htmlFor='address'>Address</Label>
-          <Textarea className='mt-2' label='Address' id='address' placeholder='address' register={register} error={errors.address} />
-        </div>
-
-        {/* Submit Button */}
         <Button type='submit' disabled={isSubmitting} className='btn btn-primary-light cursor-pointer font-semibold w-full'>
           <Save className='mr-2' /> {isSubmitting ? 'Submitting...' : 'Submit'}
         </Button>

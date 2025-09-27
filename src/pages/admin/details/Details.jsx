@@ -101,7 +101,7 @@ export default function Details() {
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8'>
           <Card>
             <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-              <CardTitle className='text-sm font-medium'>Total Cyliner Purchase</CardTitle>
+              <CardTitle className='text-sm font-medium'>Total Cycle</CardTitle>
               <ShoppingCart className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
@@ -135,9 +135,58 @@ export default function Details() {
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.total_due} TK</div>
+              <div className='text-2xl font-bold'>{data?.analytics?.total_amount - data?.analytics?.total_paid} TK</div>
             </CardContent>
           </Card>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8" >
+        <Card  >
+            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+              <CardTitle className='text-sm font-medium'>12 KG</CardTitle>
+              <Calendar className='h-4 w-4 text-muted-foreground' />
+            </CardHeader>
+            <CardContent>
+              <div className='text-2xl font-bold'>{data?.analytics?.quantities?.['12kg']} / {data?.analytics?.empty_return?.['12kg']}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+              <CardTitle className='text-sm font-medium'>25 KG</CardTitle>
+              <Calendar className='h-4 w-4 text-muted-foreground' />
+            </CardHeader>
+            <CardContent>
+              <div className='text-2xl font-bold'>{data?.analytics?.quantities?.['25kg']} / {data?.analytics?.empty_return?.['25kg']}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+              <CardTitle className='text-sm font-medium'>33 KG</CardTitle>
+              <Calendar className='h-4 w-4 text-muted-foreground' />
+            </CardHeader>
+            <CardContent>
+              <div className='text-2xl font-bold'>{data?.analytics?.quantities?.['33kg']} / {data?.analytics?.empty_return?.['33kg']}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+              <CardTitle className='text-sm font-medium'>35 KG</CardTitle>
+              <Calendar className='h-4 w-4 text-muted-foreground' />
+            </CardHeader>
+            <CardContent>
+              <div className='text-2xl font-bold'>{data?.analytics?.quantities?.['35kg']} / {data?.analytics?.empty_return?.['35kg']}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+              <CardTitle className='text-sm font-medium'>45 KG</CardTitle>
+              <Calendar className='h-4 w-4 text-muted-foreground' />
+            </CardHeader>
+            <CardContent>
+              <div className='text-2xl font-bold'>{data?.analytics?.quantities?.['45kg']} / {data?.analytics?.empty_return?.['45kg']}</div>
+            </CardContent>
+          </Card>
+
+
         </div>
 
         {/* Sales Table */}

@@ -45,14 +45,12 @@ export default function AddCollection({
 
   const date = watch('date');
 
-  // Auto-set today if date is empty
   useEffect(() => {
     if (!date) {
       setValue('date', new Date());
     }
   }, [date, setValue]);
 
-  // Fetch all customers
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
@@ -69,7 +67,6 @@ export default function AddCollection({
     fetchCustomers();
   }, []);
 
-  // Fetch customer details when selection changes
   useEffect(() => {
     if (!selectedCustomer) return;
 
@@ -111,7 +108,7 @@ export default function AddCollection({
       }
     );
 
-    queryClient.invalidateQueries({ queryKey: ['customer'] });
+    queryClient.invalidateQueries({ queryKey: ['collection'] });
     reset();
     setSingleData(null);
     setOpenModal(false);

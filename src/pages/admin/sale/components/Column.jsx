@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
-import { ArrowUpDown, Edit, Printer, SquarePen, Trash } from 'lucide-react';
+import { ArrowUpDown, Edit, Printer, Trash } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useStore from '@/store/Store';
 import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
@@ -16,7 +16,7 @@ const columns = ({ constHandelDelete }) => [
   {
     id: 'customer',
     header: () => <div className='text-center'>Customer</div>,
-    cell: ({ row }) => <div className='text-center'>{row.original.customer?.name || row.original.customer_name || "N/A"}</div>,
+    cell: ({ row }) => <div className='text-center'>{row.original.customer?.name || row.original.customer_name || 'N/A'}</div>,
   },
   {
     accessorKey: 'twelve_kg',
@@ -134,59 +134,57 @@ const columns = ({ constHandelDelete }) => [
     cell: ({ row }) => {
       const { setSale } = useStore();
       const navigate = useNavigate();
-      const invoiceRef = useRef();
+      const componentRef = useRef(null);
 
       const handlePrint = useReactToPrint({
-        content: () => invoiceRef.current,
+        content: () => componentRef.current,
         documentTitle: `Invoice_${row.original.id}`,
-        pageStyle: '@media print { body { -webkit-print-color-adjust: exact; } }',
+        pageStyle: `
+          @page {
+            size: 105mm 297mm; /* Half A4 size */
+            margin: 10mm;
+          }
+          @media print {
+            body {
+              margin: 0;
+              padding: 0;
+            }
+            .invoice-container {
+              width: 105mm;
+              height: 297mm;
+              font-family: Arial, sans-serif;
+              padding: 10mm;
+              box-sizing: border-box;
+            }
+          }
+        `,
       });
 
-      const handaleEdit = (data) => {
+      const handleEdit = (data) => {
         setSale(data);
         navigate(`/admin/sale/${data.id}`);
-      }
+      };
 
       return (
-        <div className='flex justify-center items-center'>
-  {/* Hidden Invoice for printing */}
-  <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
-    <Invoice ref={invoiceRef} sale={row.original} />
-  </div>
-
-  <ToggleGroup variant='outline' type='single'>
-    <ToggleGroupItem
-      className='cursor-pointer'
-      value='delete'
-      aria-label='Delete row'
-      onClick={() => constHandelDelete(row.original.id)}
-    >
-      <Trash width={20} height={20} />
-    </ToggleGroupItem>
-
-    <ToggleGroupItem
-      className="cursor-pointer"
-      value="edit"
-      aria-label="Edit row"
-      onClick={() => handaleEdit(row.original)}
-    >
-      <Edit width={20} height={20} />
-    </ToggleGroupItem>
-
-    <button
-      className="cursor-pointer"
-      value="print"
-      aria-label="Print Invoice"
-      onClick={handlePrint}
-    >
-      <Printer width={20} height={20} />
-    </button>
-  </ToggleGroup>
-</div>
-
-      )
+        <div>
+          <ToggleGroup variant='outline' type='single'>
+            <ToggleGroupItem className='cursor-pointer' value='delete' aria-label='Delete row' onClick={() => constHandelDelete(row.original.id)}>
+              <Trash width={20} height={20} />
+            </ToggleGroupItem>
+            <ToggleGroupItem className='cursor-pointer' value='edit' aria-label='Edit row' onClick={() => handleEdit(row.original)}>
+              <Edit width={20} height={20} />
+            </ToggleGroupItem>
+            <ToggleGroupItem className='cursor-pointer' value='print' aria-label='Print Invoice' onClick={handlePrint}>
+              <Printer width={20} height={20} />
+            </ToggleGroupItem>
+          </ToggleGroup>
+          <div style={{ display: 'none' }}>
+            <Invoice ref={componentRef} sale={row.original} />
+          </div>
+        </div>
+      );
     },
-  }
+  },
 ];
 
 export default columns;

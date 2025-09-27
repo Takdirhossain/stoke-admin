@@ -34,7 +34,6 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
     header: () => <div className="">Type</div>,
     cell: ({ row }) =>{
       let data = row?.original?.is_cylinder
-      console.log(data);
       return <div>{data == true? 'Cylinder' : 'Accessories'}</div>
     },
   },
@@ -43,7 +42,6 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
     header: () => <div className="">Image</div>,
     cell: ({ row }) =>{
       let data = row?.original?.image
-      console.log(data);
       return <div><img className='w-20 h-20' src={ API_URL + "/" + data} alt="" /></div>
     },
   },

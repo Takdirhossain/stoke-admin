@@ -78,14 +78,9 @@ export default function AddModal({
         </div>
 
         <div className="mt-4">
-          <InputField
-            label="Address"
-            id="address"
-            type="text"
-            placeholder="address"
-            register={register}
-            error={errors.address}
-           
+          <Textarea
+           {...register('address')}
+           error={errors.address}
           />
         </div>
 

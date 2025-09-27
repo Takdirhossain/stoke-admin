@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const API_URL = 'http://localhost:8000';
+export const API_URL = 'https://api.mohammadenterprise.xyz';
 // export const API_URL = 'https://sellerscomp-backend.vercel.app';
 export const PRODUCT_API = 'https://sellerscompaws.com';
 
@@ -23,7 +23,7 @@ API.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
 
-      // window.location.href = '/';
+      window.location.href = '/login';
     }
     return Promise.reject(error);
   }

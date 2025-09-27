@@ -3,6 +3,7 @@ import React from 'react'
 import { Award } from 'lucide-react'
 import { Badge } from '../ui/badge'
 import { Card, CardContent } from '../ui/card'
+import founder from '@/assets/home/Founder.png'
 
 export default function Founder() {
   return (
@@ -19,26 +20,26 @@ export default function Founder() {
       <div className="max-w-4xl mx-auto">
         <Card className="overflow-hidden">
           <div className="grid lg:grid-cols-2 gap-0">
-            <div className="relative">
+            <div className="relative p-4 ">
               <img
-                src="/abstract-geometric-shapes.png?height=400&width=400&query=professional business founder portrait in office setting"
+                src={founder}
                 alt="Founder Portrait"
-                className="w-full h-full object-cover"
+                className="w-full h-full rounded-lg object-cover"
               />
               <div className="absolute bottom-4 left-4 bg-card/90 backdrop-blur-sm rounded-lg p-3">
                 <div className="flex items-center space-x-2">
                   <Award className="w-5 h-5 text-primary" />
-                  <span className="text-sm font-medium">15+ Years Experience</span>
+                  <span className="text-sm font-medium">9+ Years Experience</span>
                 </div>
               </div>
             </div>
             <CardContent className="p-8 flex flex-col justify-center">
               <div className="mb-6">
-                <h3 className="text-2xl font-bold text-foreground mb-2">Rajesh Kumar</h3>
-                <p className="text-primary font-medium mb-4">Founder & CEO</p>
+                <h3 className="text-2xl font-bold text-foreground mb-2">Mohammad Topu</h3>
+                <p className="text-primary font-medium mb-4">Founder </p>
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  "Starting GasFlow in 2010, my vision was simple - make LPG delivery safe, reliable, and convenient
-                  for every household. With over 15 years in the gas industry, I've built this company on the
+                  "Starting GasFlow in 2017, my vision was simple - make LPG delivery safe, reliable, and convenient
+                  for every household. With over 9 years in the gas industry, I've built this company on the
                   principles of trust, quality, and customer satisfaction."
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
@@ -48,17 +49,14 @@ export default function Founder() {
               </div>
               <div className="flex items-center space-x-6">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">2010</div>
+                  <div className="text-2xl font-bold text-primary">2017</div>
                   <div className="text-sm text-muted-foreground">Founded</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-primary">2000+</div>
                   <div className="text-sm text-muted-foreground">Customers</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">50+</div>
-                  <div className="text-sm text-muted-foreground">Locations</div>
-                </div>
+               
               </div>
             </CardContent>
           </div>

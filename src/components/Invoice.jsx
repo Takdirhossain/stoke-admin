@@ -1,114 +1,65 @@
-// components/Invoice.js
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 
 const Invoice = forwardRef(({ sale }, ref) => {
-  console.log(sale)
-  if (!sale) return null;
-
-  const {
-    customer,
-    customer_name,
-    date,
-    twelve_kg, empty_twelve_kg, price_12_kg,
-    twentyfive_kg, empty_twentyfive_kg, price_25_kg,
-    thirtythree_kg, empty_thirtythree_kg, price_33_kg,
-    thirtyfive_kg, empty_thirtyfive_kg, price_35_kg,
-    fourtyfive_kg, empty_fourtyfive_kg, price_45_kg,
-    others_kg, empty_others_kg, price, pay, due
-  } = sale;
-
-  const formatCurrency = (value) => `${value || 0} TK`;
+  const customer = sale.customer || {};
+  const items = [
+    { kg: '12 KG', filled: sale.twelve_kg, empty: sale.empty_twelve_kg, price: sale.price_12_kg },
+    { kg: '25 KG', filled: sale.twentyfive_kg, empty: sale.empty_twentyfive_kg, price: sale.price_25_kg },
+    { kg: '33 KG', filled: sale.thirtythree_kg, empty: sale.empty_thirtythree_kg, price: sale.price_33_kg },
+    { kg: '35 KG', filled: sale.thirtyfive_kg, empty: sale.empty_thirtyfive_kg, price: sale.price_35_kg },
+    { kg: '45 KG', filled: sale.fourtyfive_kg, empty: sale.empty_fourtyfive_kg, price: sale.price_45_kg },
+    { kg: 'Others', filled: sale.others_kg, empty: sale.empty_others_kg, price: 0 },
+  ].filter(item => parseInt(item.filled) > 0 || parseInt(item.empty) > 0);
 
   return (
-    <div ref={ref} className="invoice-container">
-      <h1>Invoice</h1>
-
-      <div className="invoice-header">
-        <div>
-          <strong>Customer:</strong> {customer?.name || customer_name}<br />
-          <strong>Date:</strong> {date}
-        </div>
-        <div>
-          <strong>Invoice ID:</strong> {sale.id}
-        </div>
+    <div ref={ref} className="invoice-container max-w-[105mm] mx-auto p-4 font-sans text-sm bg-white border border-gray-200">
+      <div className="text-center mb-4">
+        <h1 className="text-2xl font-bold">Invoice</h1>
+        <p className="text-gray-600">Invoice #{sale.id}</p>
+        <p className="text-gray-600">Date: {sale.date}</p>
       </div>
 
-      <table className="invoice-table">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Filled / Empty</th>
-            <th>Unit Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {[
-            { label: '12 KG', filled: twelve_kg, empty: empty_twelve_kg, price: price_12_kg },
-            { label: '25 KG', filled: twentyfive_kg, empty: empty_twentyfive_kg, price: price_25_kg },
-            { label: '33 KG', filled: thirtythree_kg, empty: empty_thirtythree_kg, price: price_33_kg },
-            { label: '35 KG', filled: thirtyfive_kg, empty: empty_thirtyfive_kg, price: price_35_kg },
-            { label: '45 KG', filled: fourtyfive_kg, empty: empty_fourtyfive_kg, price: price_45_kg },
-            { label: 'Others', filled: others_kg, empty: empty_others_kg, price: 0 },
-          ].map((item) => (
-            <tr key={item.label}>
-              <td>{item.label}</td>
-              <td>{item.filled || 0} / {item.empty || 0}</td>
-              <td>{formatCurrency(item.price)}</td>
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold">Customer Information</h2>
+        <p><strong>Name:</strong> {customer.name || sale.customer_name || 'N/A'}</p>
+        <p><strong>Phone:</strong> {customer.phone || 'N/A'}</p>
+        <p><strong>Address:</strong> {customer.address || 'N/A'}</p>
+      </div>
+
+      <div className="mb-4">
+        <h2 className="text-lg font-semibold">Items</h2>
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="border p-2 text-left">Item</th>
+              <th className="border p-2 text-center">Filled</th>
+              <th className="border p-2 text-center">Empty</th>
+              <th className="border p-2 text-right">Price</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="invoice-summary">
-        <div><strong>Total Price:</strong> {formatCurrency(price)}</div>
-        <div><strong>Pay:</strong> {formatCurrency(pay)}</div>
-        <div><strong>Due:</strong> {formatCurrency(due)}</div>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <tr key={index}>
+                <td className="border p-2">{item.kg}</td>
+                <td className="border p-2 text-center">{item.filled}</td>
+                <td className="border p-2 text-center">{item.empty}</td>
+                <td className="border p-2 text-right">{item.price ? `${item.price} TK` : 'N/A'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
-      <style>
-        {`
-          .invoice-container {
-            width: 105mm; /* half A4 width */
-            padding: 10mm;
-            font-family: Arial, sans-serif;
-            border: 1px solid #ddd;
-            margin: 0 auto;
-          }
-          .invoice-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10mm;
-          }
-          .invoice-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 10mm;
-          }
-          .invoice-table th, .invoice-table td {
-            border: 1px solid #ddd;
-            padding: 4px 6px;
-            text-align: center;
-          }
-          .invoice-summary {
-            display: flex;
-            justify-content: space-between;
-            font-weight: bold;
-          }
-          @media print {
-            body * {
-              visibility: hidden;
-            }
-            .invoice-container, .invoice-container * {
-              visibility: visible;
-            }
-            .invoice-container {
-              margin: 0;
-              padding: 0;
-              border: none;
-            }
-          }
-        `}
-      </style>
+      <div className="text-right">
+        <p><strong>Total Price:</strong> {sale.price} TK</p>
+        <p><strong>Paid:</strong> {sale.pay} TK</p>
+        <p><strong>Due:</strong> {sale.due} TK</p>
+      </div>
+
+      <div className="mt-4 text-center text-gray-500">
+        <p>Thank you for your business!</p>
+        <p>Generated by Your Company Name</p>
+      </div>
     </div>
   );
 });

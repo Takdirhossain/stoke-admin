@@ -19,22 +19,16 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     toast.promise(
-      axios.post("http://localhost:8000/api/auth/login", data),
+      axios.post("https://api.mohammadenterprise.xyz/api/auth/login", data),
       {
         loading: "Signing in...",
         success: (res) => {
           const { token, data } = res.data;
 
-          // Save auth data
           localStorage.setItem("token", token);
           localStorage.setItem("user", JSON.stringify(data));
 
-          // Redirect based on role
-          if (data.role === 1) {
-            navigate("/admin/dashboard");
-          } else {
-            navigate("/dashboard");
-          }
+          navigate("/admin/dashboard");
 
           return "Login successful 🎉";
         },
