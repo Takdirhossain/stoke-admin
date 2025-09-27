@@ -6,6 +6,5 @@ export const closeAlertDialog = () => {
 };
 
 export const openDialog = (id) => {
-  console.log(id);
   document.querySelector(`#${id}`)?.click();
 }

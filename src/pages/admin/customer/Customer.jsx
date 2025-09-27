@@ -47,7 +47,7 @@ export default function Customer() {
     }).then((result) => {
       if (result.isConfirmed) {
         toast.promise(
-          API.delete(`/customers/${id}`),
+          API.get(`/customers/${id}`),
           {
             loading: 'Deleting...',
             success: (data) => data.message || 'Deleted successfully!',

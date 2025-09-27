@@ -57,7 +57,12 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
         <ArrowUpDown />
       </Button>
     ),
-    cell: ({ row }) => <div>{row.getValue('total_due')} TK</div>,
+    cell: ({ row }) => {
+      const totalPurchase = row.getValue('total_purchase');
+      const totalPaid = row.getValue('total_paid');
+      const totalDue = totalPurchase - totalPaid;
+      return <div>{totalDue} TK</div>;
+    },
   },
 
   // 🔹 Cylinder variants using accessorFn
@@ -98,21 +103,25 @@ const columns = ({ setSingleData, constHandelDelete, setOpenModal }) => [
             <ToggleGroupItem value='edit' aria-label='Edit user' onClick={() => setData(row?.original)}>
               <Dialog>
                 <DialogTrigger asChild>
-                 <button  > <SquarePen width={20} height={20} /></button>
+                  <button>
+                    {' '}
+                    <SquarePen width={20} height={20} />
+                  </button>
                 </DialogTrigger>
-               {data &&  <EditModal data={data} />}
+                {data && <EditModal data={data} />}
               </Dialog>
             </ToggleGroupItem>
 
             <ToggleGroupItem className='cursor-pointer' value='delete' aria-label='Delete user' onClick={() => constHandelDelete(row.original.id)}>
               <Trash width={20} height={20} />
             </ToggleGroupItem>
-
+            <Link to={`/admin/customer/${row.original.id}`}>
             <ToggleGroupItem className='cursor-pointer' value='settings' aria-label='Customer details'>
-              <Link to={`/admin/customer/${row.original.id}`}>
+             
                 <Settings2 width={20} height={20} />
-              </Link>
+             
             </ToggleGroupItem>
+            </Link>
           </ToggleGroup>
         </div>
       );

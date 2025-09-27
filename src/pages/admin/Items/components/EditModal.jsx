@@ -16,7 +16,6 @@ export default function EditModal({
   singleData,
   setSingleData,
 }) {
-  console.log(data)
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm();
 
   const queryClient = useQueryClient();

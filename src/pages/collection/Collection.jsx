@@ -60,8 +60,8 @@ export default function Collection() {
       <div className='w-full'>
         <div className='flex items-center justify-between'>
           <div>
-            <h2 className='text-2xl font-semibold'>Sale Management</h2>
-            <p className='text-sm text-muted-foreground'>Manage your Sale</p>
+            <h2 className='text-2xl font-semibold'>Due Bill Collection Management</h2>
+            <p className='text-sm text-muted-foreground'>Manage your Due Bill Collection</p>
           </div>
           <Button onClick={() => setOpenModal(true)}>Add Collection</Button>
         </div>
@@ -88,7 +88,7 @@ export default function Collection() {
         </div>
       </div>
 
-      {openModal && <AddCollection openModal={openModal} setOpenModal={setOpenModal} title={singleData?.id ? 'Edit Customer' : 'Add Customer'} singleData={singleData} setSingleData={setSingleData} />}
+      {openModal && <AddCollection openModal={openModal} setOpenModal={setOpenModal} title={singleData?.id ? 'Edit Collection' : 'Add Collection'} singleData={singleData} setSingleData={setSingleData} />}
     </>
   );
 }

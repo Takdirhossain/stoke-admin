@@ -27,18 +27,18 @@ export default function Dashboard() {
   });
 
   let filledCylinder = [
-    { label: '12KG', value: data?.current_stock?.stock_12kg },
-    { label: '25KG', value: data?.current_stock?.stock_25kg },
-    { label: '33KG', value: data?.current_stock?.stock_33kg },
-    { label: '35KG', value: data?.current_stock?.stock_35kg },
-    { label: '45KG', value: data?.current_stock?.stock_45kg },
+    { label: '12KG', value: data?.current_stock?.twelve_kg },
+    { label: '25KG', value: data?.current_stock?.twentyfive_kg },
+    { label: '33KG', value: data?.current_stock?.thirtythree_kg },
+    { label: '35KG', value: data?.current_stock?.thirtyfive_kg },
+    { label: '45KG', value: data?.current_stock?.fourtyfive_kg },
   ];
   let emptyCylinder = [
-    { label: '12KG', value: data?.empty_cylinders?.empty_12kg },
-    { label: '25KG', value: data?.empty_cylinders?.empty_25kg },
-    { label: '33KG', value: data?.empty_cylinders?.empty_33kg },
-    { label: '35KG', value: data?.empty_cylinders?.empty_35kg },
-    { label: '45KG', value: data?.empty_cylinders?.empty_45kg },
+    { label: '12KG', value: data?.current_stock?.empty_twelve_kg },
+    { label: '25KG', value: data?.current_stock?.empty_twentyfive_kg },
+    { label: '33KG', value: data?.current_stock?.empty_thirtythree_kg },
+    { label: '35KG', value: data?.current_stock?.empty_thirtyfive_kg },
+    { label: '45KG', value: data?.current_stock?.empty_fourtyfive_kg },
   ];
   return (
     <div className='flex-1 space-y-6 p-6'>

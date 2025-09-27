@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { BarChart3, Users, Package, Truck, DollarSign, TrendingUp, Calendar, Settings, LogOut, Home, ShoppingCart, UserCheck, AlertTriangle, CheckCircle, Clock, ShieldBan, BaggageClaim, Boxes } from 'lucide-react';
+import { BarChart3, Users, Package, Truck, DollarSign, TableOfContents, Calendar, Settings, LogOut, Home, ShoppingCart, UserCheck, AlertTriangle, CheckCircle, Clock, ShieldBan, BaggageClaim, Boxes } from 'lucide-react';
 import { Link, Outlet } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ export default function AdminLayout() {
               <div className='w-8 h-8 bg-primary rounded-full flex items-center justify-center'>
                 <span className='text-primary-foreground font-bold text-sm'>G</span>
               </div>
-              <span className='text-lg font-bold text-sidebar-foreground'>GasFlow Admin</span>
+              <span className='text-lg font-bold text-sidebar-foreground'>Mohammad Enterprice</span>
             </div>
           </SidebarHeader>
 
@@ -97,6 +97,16 @@ export default function AdminLayout() {
                         <SidebarMenuButton isActive={isActive}>
                           <ShieldBan className='w-4 h-4' />
                           <span>Inactive</span>
+                        </SidebarMenuButton>
+                      )}
+                    </NavLink>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <NavLink to='/admin/items'>
+                      {({ isActive }) => (
+                        <SidebarMenuButton isActive={isActive}>
+                          <TableOfContents className='w-4 h-4' />
+                          <span>CMS</span>
                         </SidebarMenuButton>
                       )}
                     </NavLink>

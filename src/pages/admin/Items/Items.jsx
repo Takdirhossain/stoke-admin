@@ -64,10 +64,10 @@ export default function Items() {
       <div className="w-full">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-semibold">Customer Management</h2>
-            <p className="text-sm text-muted-foreground">Manage your Customer</p>
+            <h2 className="text-2xl font-semibold">CMS Management</h2>
+            <p className="text-sm text-muted-foreground">Manage your Content</p>
           </div>
-          <Button onClick={() => setOpenModal(true)}>Add Customer</Button>
+          <Button onClick={() => setOpenModal(true)}>Add Content</Button>
         </div>
 
         <div className="py-6">
