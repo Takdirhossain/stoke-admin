@@ -19,7 +19,7 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     toast.promise(
-      axios.post("https://api.mohammadenterprise.xyz/api/auth/login", data),
+      axios.post("http://127.0.0.1:8000/api/auth/login", data),
       {
         loading: "Signing in...",
         success: (res) => {

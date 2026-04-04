@@ -14,6 +14,19 @@ const columns = ({ constHandelDelete }) => [
     header: () => <div className='text-center'>Index</div>,
     cell: ({ row }) => <div className='text-center'>{row.index + 1}</div>,
   },
+    {
+    accessorKey: 'five_kg',
+    header: () => <div className='text-center'>5 KG</div>,
+    cell: ({ row }) => {
+      const filled = row.original.five_kg || 0;
+      const empty = row.original.empty_five_kg || 0;
+      return (
+        <div className='text-center'>
+          {filled} / {empty}
+        </div>
+      );
+    },
+  },
   {
     accessorKey: 'twelve_kg',
     header: () => <div className='text-center'>12 KG</div>,
@@ -72,19 +85,6 @@ const columns = ({ constHandelDelete }) => [
     cell: ({ row }) => {
       const filled = row.original.fourtyfive_kg || 0;
       const empty = row.original.empty_fourtyfive_kg || 0;
-      return (
-        <div className='text-center'>
-          {filled} / {empty}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'others_kg',
-    header: () => <div className='text-center'>Others</div>,
-    cell: ({ row }) => {
-      const filled = row.original.others_kg || 0;
-      const empty = row.original.empty_others_kg || 0;
       return (
         <div className='text-center'>
           {filled} / {empty}

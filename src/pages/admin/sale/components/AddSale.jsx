@@ -35,6 +35,7 @@ export default function AddSale() {
   const [selectedCustomer, setSelectedCustomer] = useState([]);
   // qty and price fields mapping
   const fields = [
+    { qty: 'five_kg', price: 'price_5_kg' },
     { qty: 'twelve_kg', price: 'price_12_kg' },
     { qty: 'twentyfive_kg', price: 'price_25_kg' },
     { qty: 'thirtythree_kg', price: 'price_33_kg' },
@@ -133,6 +134,11 @@ export default function AddSale() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <CardContent className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6'>
               {/* Quantity + Price Fields */}
+               <InputField id='five_kg' type='number' className='bg-white' label='5 KG' register={register} error={errors.five_kg} />
+              <InputField id='empty_five_kg' type='number' className='bg-white' label='Empty 5 KG' register={register} error={errors.empty_five_kg} />
+              <InputField id='price_5_kg' type='number' className='bg-white' label='Unit Price 5 KG' register={register} error={errors.price_5_kg} />
+
+
               <InputField id='twelve_kg' type='number' className='bg-white' label='12 KG' register={register} error={errors.twelve_kg} />
               <InputField id='empty_twelve_kg' type='number' className='bg-white' label='Empty 12 KG' register={register} error={errors.empty_twelve_kg} />
               <InputField id='price_12_kg' type='number' className='bg-white' label='Unit Price 12 KG' register={register} error={errors.price_12_kg} />

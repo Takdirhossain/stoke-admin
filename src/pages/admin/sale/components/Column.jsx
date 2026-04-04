@@ -18,6 +18,19 @@ const columns = ({ constHandelDelete }) => [
     header: () => <div className='text-center'>Customer</div>,
     cell: ({ row }) => <div className='text-center'>{row.original.customer?.name || row.original.customer_name || 'N/A'}</div>,
   },
+    {
+    accessorKey: 'five_kg',
+    header: () => <div className='text-center'>5 KG</div>,
+    cell: ({ row }) => {
+      const filled = row.original.five_kg || 0;
+      const empty = row.original.empty_five_kg || 0;
+      return (
+        <div className='text-center'>
+          {filled} / {empty}
+        </div>
+      );
+    },
+  },
   {
     accessorKey: 'twelve_kg',
     header: () => <div className='text-center'>12 KG</div>,

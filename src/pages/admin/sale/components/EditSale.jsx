@@ -37,6 +37,7 @@ export default function EditSale() {
   const navigate = useNavigate();
 
   const fields = [
+    { qty: 'five_kg', price: 'price_5_kg' },
     { qty: 'twelve_kg', price: 'price_12_kg' },
     { qty: 'twentyfive_kg', price: 'price_25_kg' },
     { qty: 'thirtythree_kg', price: 'price_33_kg' },
@@ -155,7 +156,7 @@ export default function EditSale() {
               <InputField id='due' type='number' className='bg-gray-100' label='Due' register={register} error={errors.due} readOnly />
             </CardContent>
 
-            <div className='mx-6 flex gap-6'>
+            <div className='mx-6 flex mt-6 gap-6'>
               <div className='flex flex-col gap-2 min-w-[200px]'>
                 <label className='text-sm font-medium'>Date</label>
                 <Popover>

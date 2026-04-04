@@ -26,19 +26,19 @@ export default function AddStoke() {
   } = useForm();
   const queryClient = useQueryClient();
   const [isPackage, setIsPackage] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      const formattedDate = data.date ? format(data.date, 'yyyy-MM-dd') : null;
-  
+      const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+
       const payload = {
         ...data,
         date: formattedDate,
         is_package: isPackage,
       };
-  
+
       await toast.promise(
         API.post('/api/products', payload),
         {
@@ -54,15 +54,15 @@ export default function AddStoke() {
           },
         }
       );
-  
+
       queryClient.invalidateQueries({ queryKey: ['products'] });
       reset();
-  
+
     } catch (err) {
-      
+
     }
   };
-  
+
   const date = watch('date');
 
   return (
@@ -74,19 +74,21 @@ export default function AddStoke() {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6'>
+          <InputField id='five_kg' type='number' className='bg-white' label='5 KG' register={register} error={errors.five_kg} />
           <InputField id='twelve_kg' type='number' className='bg-white' label='12 KG' register={register} error={errors.twelve_kg} />
           <InputField id='twentyfive_kg' type='number' className='bg-white' label='25 KG' register={register} error={errors.twentyfive_kg} />
           <InputField id='thirtythree_kg' type='number' className='bg-white' label='33 KG' register={register} error={errors.thirtythree_kg} />
           <InputField id='thirtyfive_kg' type='number' className='bg-white' label='35 KG' register={register} error={errors.thirtyfive_kg} />
           <InputField id='fourtyfive_kg' type='number' className='bg-white' label='45 KG' register={register} error={errors.fourtyfive_kg} />
-          <InputField id='others_kg' type='number' className='bg-white' label='Others KG' register={register} error={errors.others_kg} />
+          {/* <InputField id='others_kg' type='number' className='bg-white' label='Others KG' register={register} error={errors.others_kg} /> */}
 
+          <InputField id='empty_five_kg' type='number' className='bg-white' label='Empty 5 KG' register={register} error={errors.empty_five_kg} />
           <InputField id='empty_twelve_kg' type='number' className='bg-white' label='Empty 12 KG' register={register} error={errors.empty_twelve_kg} />
           <InputField id='empty_twentyfive_kg' type='number' className='bg-white' label='Empty 25 KG' register={register} error={errors.empty_twentyfive_kg} />
           <InputField id='empty_thirtythree_kg' type='number' className='bg-white' label='Empty 33 KG' register={register} error={errors.empty_thirtythree_kg} />
           <InputField id='empty_thirtyfive_kg' type='number' className='bg-white' label='Empty 35 KG' register={register} error={errors.empty_thirtyfive_kg} />
           <InputField id='empty_fourtyfive_kg' type='number' className='bg-white' label='Empty 45 KG' register={register} error={errors.empty_fourtyfive_kg} />
-          <InputField id='empty_others_kg' type='number' className='bg-white' label='Empty Others KG' register={register} error={errors.empty_others_kg} />
+          {/* <InputField id='empty_others_kg' type='number' className='bg-white' label='Empty Others KG' register={register} error={errors.empty_others_kg} /> */}
 
           <InputField id='price' type='number' className='bg-white' label='Price' register={register} error={errors.price} />
 
@@ -94,23 +96,37 @@ export default function AddStoke() {
             <label className='text-sm font-medium'>Date</label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button type='button' variant='outline' className='justify-start text-left font-normal w-full'>
-                  <CalendarIcon className='mr-2 h-4 w-4' />
-                  {date ? format(new Date(date), 'dd-MM-yyyy') : 'Pick a date'}
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="justify-start text-left font-normal w-full"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {selectedDate
+                    ? format(selectedDate, "dd-MM-yyyy")
+                    : "Pick a date"}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent align='start' className='p-0'>
+
+              <PopoverContent align="start" className="p-0">
                 <Calendar
-                  mode='single'
-                  selected={date ? new Date(date) : null}
-                  onSelect={(val) => setValue('date', val)}
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(val) => {
+                    setSelectedDate(val);
+                    setValue("date", val); 
+                  }}
                   initialFocus
-                  className='rounded-md border shadow-md w-full'
+                  className="rounded-md border shadow-md w-full"
                   dayClassName={(day) => {
-                    if (date && format(day, 'yyyy-MM-dd') === format(new Date(date), 'yyyy-MM-dd')) {
-                      return 'bg-blue-500 text-white rounded-full';
+                    if (
+                      selectedDate &&
+                      format(day, "yyyy-MM-dd") ===
+                      format(selectedDate, "yyyy-MM-dd")
+                    ) {
+                      return "bg-blue-500 text-white rounded-full";
                     }
-                    return ''; 
+                    return "";
                   }}
                 />
               </PopoverContent>
@@ -122,7 +138,7 @@ export default function AddStoke() {
             <Label>Is Package?</Label>
 
             <div>
-              <Switch checked={isPackage} onCheckedChange={setIsPackage} />
+              <Switch checked={isPackage} onCheckedChange={setIsPackage} className='data-[state=unchecked]:bg-red-500 data-[state=checked]:bg-green-500' />
             </div>
           </div>
         </CardContent>

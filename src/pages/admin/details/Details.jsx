@@ -10,17 +10,14 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import API from "@/config/config";
 
-// helper to format YYYY-MM-DD
 const formatDate = (date) => date ? date.toISOString().split("T")[0] : null;
 
 export default function Details() {
   const { id } = useParams();
 
-  // date states
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
-  // API query
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["details", id, fromDate, toDate],
     queryFn: async () => {
@@ -105,7 +102,7 @@ export default function Details() {
               <ShoppingCart className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.sales_count} Cylinders</div>
+              <div className='text-2xl font-bold'>{data?.analytics?.sales_count || 0} Cylinders</div>
             </CardContent>
           </Card>
 
@@ -115,7 +112,7 @@ export default function Details() {
               <DollarSign className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.total_amount} TK</div>
+              <div className='text-2xl font-bold'>{data?.analytics?.total_amount || 0} TK</div>
             </CardContent>
           </Card>
 
@@ -125,7 +122,7 @@ export default function Details() {
               <Users className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.total_paid} TK</div>
+              <div className='text-2xl font-bold'>{data?.analytics?.total_paid || 0} TK</div>
             </CardContent>
           </Card>
 
@@ -135,7 +132,7 @@ export default function Details() {
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.total_amount - data?.analytics?.total_paid} TK</div>
+              <div className='text-2xl font-bold'>{(data?.analytics?.total_amount || 0) - (data?.analytics?.total_paid || 0)} TK</div>
             </CardContent>
           </Card>
         </div>
@@ -146,7 +143,7 @@ export default function Details() {
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.quantities?.['12kg']} / {data?.analytics?.empty_return?.['12kg']}</div>
+              <div className='text-2xl font-bold'>{(data?.analytics?.quantities?.['12kg'] || 0)} / {(data?.analytics?.empty_return?.['12kg'] || 0)}</div>
             </CardContent>
           </Card>
           <Card>
@@ -155,7 +152,7 @@ export default function Details() {
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.quantities?.['25kg']} / {data?.analytics?.empty_return?.['25kg']}</div>
+              <div className='text-2xl font-bold'>{(data?.analytics?.quantities?.['25kg'] || 0)} / {(data?.analytics?.empty_return?.['25kg'] || 0)}</div>
             </CardContent>
           </Card>
           <Card>
@@ -164,7 +161,7 @@ export default function Details() {
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.quantities?.['33kg']} / {data?.analytics?.empty_return?.['33kg']}</div>
+              <div className='text-2xl font-bold'>{(data?.analytics?.quantities?.['33kg'] || 0)} / {(data?.analytics?.empty_return?.['33kg'] || 0)}</div>
             </CardContent>
           </Card>
           <Card>
@@ -173,7 +170,7 @@ export default function Details() {
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.quantities?.['35kg']} / {data?.analytics?.empty_return?.['35kg']}</div>
+              <div className='text-2xl font-bold'>{(data?.analytics?.quantities?.['35kg'] || 0)} / {(data?.analytics?.empty_return?.['35kg'] || 0)}</div>
             </CardContent>
           </Card>
           <Card>
@@ -182,7 +179,7 @@ export default function Details() {
               <Calendar className='h-4 w-4 text-muted-foreground' />
             </CardHeader>
             <CardContent>
-              <div className='text-2xl font-bold'>{data?.analytics?.quantities?.['45kg']} / {data?.analytics?.empty_return?.['45kg']}</div>
+              <div className='text-2xl font-bold'>{(data?.analytics?.quantities?.['45kg'] || 0)} / {(data?.analytics?.empty_return?.['45kg'] || 0)}</div>
             </CardContent>
           </Card>
 
@@ -193,12 +190,12 @@ export default function Details() {
         <Table>
           <TableHeader className='bg-muted'>
             <TableRow>
+              <TableHead className='w-[100px]'>5KG</TableHead>
               <TableHead className='w-[100px]'>12KG</TableHead>
               <TableHead>25KG</TableHead>
               <TableHead>33KG</TableHead>
               <TableHead className='text-right'>35KG</TableHead>
               <TableHead className='text-right'>45KG</TableHead>
-              <TableHead className='text-right'>Others</TableHead>
               <TableHead className='text-right'>Total</TableHead>
               <TableHead className='text-right'>Pay</TableHead>
               <TableHead className='text-right'>Due</TableHead>
@@ -211,6 +208,9 @@ export default function Details() {
             {data?.sales?.length > 0 ? (
               data.sales.map((td, index) => (
                 <TableRow key={index}>
+                  <TableCell className='font-medium'>
+                    {td.five_kg ?? '0'}/{td.empty_five_kg ?? '0'}
+                  </TableCell>
                   <TableCell className='font-medium'>
                     {td.twelve_kg ?? '0'}/{td.empty_twelve_kg ?? '0'}
                   </TableCell>
@@ -226,9 +226,7 @@ export default function Details() {
                   <TableCell className='text-right'>
                     {td.fourtyfive_kg ?? '0'}/{td.empty_fourtyfive_kg ?? '0'}
                   </TableCell>
-                  <TableCell className='text-right'>
-                    {td.others_kg ?? '0'}/{td.empty_others_kg ?? '0'}
-                  </TableCell>
+
                   <TableCell className='text-right'>{td.price ?? '0'}</TableCell>
                   <TableCell className='text-right'>{td.pay ?? '0'}</TableCell>
                   <TableCell className='text-right'>{td.due ?? '0'}</TableCell>

@@ -31,6 +31,7 @@ export default function EditStoke() {
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
+      five_kg: '',
       twelve_kg: '',
       twentyfive_kg: '',
       thirtythree_kg: '',
@@ -54,6 +55,7 @@ export default function EditStoke() {
   useEffect(() => {
     if (product) {
       reset({
+        five_kg: product.five_kg || '',
         twelve_kg: product.twelve_kg || '',
         twentyfive_kg: product.twentyfive_kg || '',
         thirtythree_kg: product.thirtythree_kg || '',
@@ -101,21 +103,22 @@ export default function EditStoke() {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-          <InputField id="twelve_kg" type="number" label="12 KG" register={register} error={errors.twelve_kg} />
-          <InputField id="twentyfive_kg" type="number" label="25 KG" register={register} error={errors.twentyfive_kg} />
-          <InputField id="thirtythree_kg" type="number" label="33 KG" register={register} error={errors.thirtythree_kg} />
-          <InputField id="thirtyfive_kg" type="number" label="35 KG" register={register} error={errors.thirtyfive_kg} />
-          <InputField id="fourtyfive_kg" type="number" label="45 KG" register={register} error={errors.fourtyfive_kg} />
-          <InputField id="others_kg" type="number" label="Others KG" register={register} error={errors.others_kg} />
+          <InputField className="bg-white" id="five_kg" type="number" label="5 KG" register={register} error={errors.five_kg} />
+          <InputField className="bg-white" id="twelve_kg" type="number" label="12 KG" register={register} error={errors.twelve_kg} />
+          <InputField className="bg-white" id="twentyfive_kg" type="number" label="25 KG" register={register} error={errors.twentyfive_kg} />
+          <InputField className="bg-white" id="thirtythree_kg" type="number" label="33 KG" register={register} error={errors.thirtythree_kg} />
+          <InputField className="bg-white" id="thirtyfive_kg" type="number" label="35 KG" register={register} error={errors.thirtyfive_kg} />
+          <InputField className="bg-white" id="fourtyfive_kg" type="number" label="45 KG" register={register} error={errors.fourtyfive_kg} />
+     
+ 
+          <InputField className="bg-white" id="empty_five_kg" type="number" label="Empty 5 KG" register={register} error={errors.empty_five_kg} />
+           <InputField className="bg-white" id="empty_twelve_kg" type="number" label="Empty 12 KG" register={register} error={errors.empty_twelve_kg} />
+          <InputField className="bg-white" id="empty_twentyfive_kg" type="number" label="Empty 25 KG" register={register} error={errors.empty_twentyfive_kg} />
+          <InputField className="bg-white" id="empty_thirtythree_kg" type="number" label="Empty 33 KG" register={register} error={errors.empty_thirtythree_kg} />
+          <InputField className="bg-white" id="empty_thirtyfive_kg" type="number" label="Empty 35 KG" register={register} error={errors.empty_thirtyfive_kg} />
+          <InputField className="bg-white" id="empty_fourtyfive_kg" type="number" label="Empty 45 KG" register={register} error={errors.empty_fourtyfive_kg} />
 
-          <InputField id="empty_twelve_kg" type="number" label="Empty 12 KG" register={register} error={errors.empty_twelve_kg} />
-          <InputField id="empty_twentyfive_kg" type="number" label="Empty 25 KG" register={register} error={errors.empty_twentyfive_kg} />
-          <InputField id="empty_thirtythree_kg" type="number" label="Empty 33 KG" register={register} error={errors.empty_thirtythree_kg} />
-          <InputField id="empty_thirtyfive_kg" type="number" label="Empty 35 KG" register={register} error={errors.empty_thirtyfive_kg} />
-          <InputField id="empty_fourtyfive_kg" type="number" label="Empty 45 KG" register={register} error={errors.empty_fourtyfive_kg} />
-          <InputField id="empty_others_kg" type="number" label="Empty Others KG" register={register} error={errors.empty_others_kg} />
-
-          <InputField id="price" type="number" label="Price" register={register} error={errors.price} />
+          <InputField className="bg-white" id="price" type="number" label="Price" register={register} error={errors.price} />
 
           {/* Date Picker */}
           <div className="flex flex-col gap-2">
@@ -142,7 +145,7 @@ export default function EditStoke() {
           {/* Package Switch */}
           <div className="flex gap-2 items-center">
             <Label>Is Package?</Label>
-            <Switch checked={isPackage} onCheckedChange={setIsPackage} />
+            <Switch checked={isPackage} onCheckedChange={setIsPackage} className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500"/>
           </div>
         </CardContent>
 

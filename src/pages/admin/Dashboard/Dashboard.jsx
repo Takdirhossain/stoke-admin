@@ -8,6 +8,7 @@ import API from '@/config/config';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { format, addHours, parseISO } from 'date-fns';
 
 export default function Dashboard() {
   const [fromDate, setFromDate] = useState('');
@@ -25,8 +26,16 @@ export default function Dashboard() {
     },
     keepPreviousData: true,
   });
+//  const dateStr = data?.current_stock?.updated_at;
+
+// const utcDate = parseISO(dateStr);
+
+// const bdDate = addHours(utcDate, 6);
+const formatted = "";
+
 
   let filledCylinder = [
+    { label: '5KG', value: data?.current_stock?.five_kg },
     { label: '12KG', value: data?.current_stock?.twelve_kg },
     { label: '25KG', value: data?.current_stock?.twentyfive_kg },
     { label: '33KG', value: data?.current_stock?.thirtythree_kg },
@@ -34,6 +43,7 @@ export default function Dashboard() {
     { label: '45KG', value: data?.current_stock?.fourtyfive_kg },
   ];
   let emptyCylinder = [
+    { label: '5KG', value: data?.current_stock?.empty_five_kg },
     { label: '12KG', value: data?.current_stock?.empty_twelve_kg },
     { label: '25KG', value: data?.current_stock?.empty_twentyfive_kg },
     { label: '33KG', value: data?.current_stock?.empty_thirtythree_kg },
@@ -117,7 +127,10 @@ export default function Dashboard() {
       <div className='grid gap-6 md:grid-cols-2'>
         <Card>
           <CardHeader>
-            <CardTitle className='text-lg font-semibold'>Cylinder Stock</CardTitle>
+           <div className='flex justify-between'>
+             <CardTitle className='text-lg font-semibold'>Cylinder Stock</CardTitle>
+            <CardTitle className='text-sm font-semibold'>Updated: {formatted}</CardTitle>
+           </div>
           </CardHeader>
 
           <CardContent>
