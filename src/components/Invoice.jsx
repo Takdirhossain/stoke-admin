@@ -227,13 +227,15 @@ const InvoiceA6 = ({ content }) => (
 
       <View style={styles.totalsRow}>
         <View style={styles.totalsColLabels}>
+          {content?.other_cost_name && <Text style={styles.totalsValueTotal}>{content?.other_cost_name}</Text>}
           <Text style={styles.totalsValueTotal}>Total</Text>
 
           <Text style={styles.totalsValueTotal}>Pay</Text>
           <Text style={styles.totalsValueTotal}>Due</Text>
         </View>
         <View style={styles.totalsColValues}>
-          <Text style={styles.totalsValueTotal}>{content?.price}</Text>
+          {content?.other_cost_name && <Text style={styles.totalsValueTotal}>{content?.other_cost_amount || 0}</Text>}
+          <Text style={styles.totalsValueTotal}>{(parseFloat(content?.other_cost_amount) || 0) + (parseFloat(content?.price) || 0)}</Text>
           <Text style={styles.totalsValueTotal}>{content?.pay}</Text>
           <Text style={styles.totalsValueTotal}>{content?.due}</Text>
         </View>
@@ -241,14 +243,14 @@ const InvoiceA6 = ({ content }) => (
 
       <View style={styles.footerContainer} fixed>
         <View style={styles.footerColumn}>
-          <Text style={styles.footerTitle}>Payment Info</Text>
-          <Text style={styles.footerDetailsBold}>Studio Shodwe</Text>
-          <Text style={styles.footerDetails}>Acc: 0123 4567 8901</Text>
+          <Text style={styles.footerTitle}>Mohammad Enterprise</Text>
+          <Text style={styles.footerDetailsBold}>Phone: 01792429367</Text>
+          <Text style={styles.footerDetails}>Address: 336/B, Khilgaon, Dhaka</Text>
         </View>
 
         <View style={[styles.footerColumn, { textAlign: 'right' }]}>
-          <Text style={styles.footerDetailsBold}>Samira Hadid</Text>
-          <Text style={styles.footerDetails}>hello@site.com</Text>
+          <Text style={styles.footerDetailsBold}>{content?.customer?.name}</Text>
+          <Text style={styles.footerDetails}>{content?.customer?.phone}</Text>
         </View>
       </View>
 

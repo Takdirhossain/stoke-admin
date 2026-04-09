@@ -94,6 +94,10 @@ export default function AddCollection({
       toast.error('Date is required');
       return;
     }
+    if(details?.totalDue && data.pay > details.totalDue) {
+      toast.error('Pay cannot be greater than total due');
+      return;
+    }
 
     data.customer = selectedCustomer.value;
     data.date = data.date ? format(data.date, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
@@ -176,24 +180,10 @@ export default function AddCollection({
         {/* Customer details */}
         {details && (
           <div className="mt-4">
-            <p>Total Buy: {details?.totalBuy} TK</p>
-            <p>Total Pay: {details?.totalPay} TK</p>
             <p>Total Due: {details?.totalDue} TK</p>
           </div>
         )}
 
-        {/* Note */}
-        <div className="mt-4">
-          <Label htmlFor="address">Note</Label>
-          <Textarea
-            className="mt-2"
-            label="Address"
-            id="address"
-            placeholder="Address"
-            register={register}
-            error={errors.address}
-          />
-        </div>
 
         {/* Submit Button */}
         <Button

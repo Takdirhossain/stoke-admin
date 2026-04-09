@@ -102,8 +102,8 @@ export default function AddSale() {
       await toast.promise(API.post('/api/sales', payload), {
         loading: 'Saving...',
         success: () => {
-          toast.success('Stock saved successfully!');
-          queryClient.invalidateQueries({ queryKey: ['products'] });
+          toast.success('Sale saved successfully!');
+          queryClient.invalidateQueries({ queryKey: ['sales'] });
           reset();
           // navigate('/admin/stoke');
         },
@@ -167,6 +167,9 @@ export default function AddSale() {
 
               {/* Due (ReadOnly) */}
               <InputField id='due' type='number' className='bg-gray-100' label='Due' register={register} error={errors.due} readOnly />
+
+               <InputField id='other_cost_name' type='text' className='bg-white' label='Other Cost Name' register={register} error={errors.other_cost_name} />
+               <InputField id='other_cost_amount' type='text' className='bg-white' label='Other Cost Amount' register={register} error={errors.other_cost_amount} />
             </CardContent>
 
             {/* Date & Package */}
