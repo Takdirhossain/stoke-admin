@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import columns from './components/Column';
 import AddModal from './components/AddSale';
 import { DataTable } from '@/components/common/data-table';
@@ -13,6 +13,7 @@ import { Card } from '@/components/ui/card';
 import { useForm } from 'react-hook-form';
 import AddSale from './components/AddSale';
 import { Link } from 'react-router-dom';
+import PrintButton from '@/components/PrintButton';
 
 export default function Sale() {
   const [openModal, setOpenModal] = useState(false);
@@ -21,6 +22,8 @@ export default function Sale() {
   const [parPage, setParPage] = useState(20);
   const [searchTerm, setSearchTerm] = useState('');
   const queryClient = useQueryClient();
+
+
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['products', page, searchTerm],
@@ -68,6 +71,8 @@ export default function Sale() {
           </div>
          <Link to='/admin/sale/add'> <Button className='cursor-pointer'>Add Sale</Button></Link>
         </div>
+
+
 
         <div className='py-6'>
           <div className='overflow-hidden rounded-md '>

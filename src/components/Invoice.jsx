@@ -1,67 +1,259 @@
-import { forwardRef } from 'react';
+import React from 'react';
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
-const Invoice = forwardRef(({ sale }, ref) => {
-  const customer = sale.customer || {};
-  const items = [
-    { kg: '12 KG', filled: sale.twelve_kg, empty: sale.empty_twelve_kg, price: sale.price_12_kg },
-    { kg: '25 KG', filled: sale.twentyfive_kg, empty: sale.empty_twentyfive_kg, price: sale.price_25_kg },
-    { kg: '33 KG', filled: sale.thirtythree_kg, empty: sale.empty_thirtythree_kg, price: sale.price_33_kg },
-    { kg: '35 KG', filled: sale.thirtyfive_kg, empty: sale.empty_thirtyfive_kg, price: sale.price_35_kg },
-    { kg: '45 KG', filled: sale.fourtyfive_kg, empty: sale.empty_fourtyfive_kg, price: sale.price_45_kg },
-    { kg: 'Others', filled: sale.others_kg, empty: sale.empty_others_kg, price: 0 },
-  ].filter(item => parseInt(item.filled) > 0 || parseInt(item.empty) > 0);
+// --- Styles Adjusted for A6 ---
+const styles = StyleSheet.create({
+  page: {
+    padding: '15 20', // Reduced padding for smaller canvas
+    backgroundColor: '#F7F6E8',
+    fontFamily: 'Helvetica',
+    fontSize: 7, // Smaller base font for A6
+    color: '#000000',
+  },
+  line: {
+    borderBottomWidth: 0.5, // Thinner lines
+    borderBottomColor: '#BFBFBF',
+    marginBottom: 8,
+  },
 
-  return (
-    <div ref={ref} className="invoice-container max-w-[105mm] mx-auto p-4 font-sans text-sm bg-white border border-gray-200">
-      <div className="text-center mb-4">
-        <h1 className="text-2xl font-bold">Invoice</h1>
-        <p className="text-gray-600">Invoice #{sale.id}</p>
-        <p className="text-gray-600">Date: {sale.date}</p>
-      </div>
+  // -- Header Section --
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    marginBottom: 8,
+  },
+  logoInvoice: {
+    fontSize: 22, // Scaled down from 72
+    fontWeight: 'bold',
+    letterSpacing: -1,
+  },
+    headline: {
+    fontSize: 16, // Scaled down from 72
+    fontWeight: 600,
+    letterSpacing: -1,
+  },
+  headerInfo: {
+    textAlign: 'right',
+    paddingBottom: 4,
+  },
+  headerTextRegular: {
+    fontSize: 6,
+    marginBottom: 1,
+  },
+  headerTextBold: {
+    fontSize: 6,
+    fontWeight: 'bold',
+  },
 
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold">Customer Information</h2>
-        <p><strong>Name:</strong> {customer.name || sale.customer_name || 'N/A'}</p>
-        <p><strong>Phone:</strong> {customer.phone || 'N/A'}</p>
-        <p><strong>Address:</strong> {customer.address || 'N/A'}</p>
-      </div>
+  // -- Billed To Section --
+  billedToRow: {
+    flexDirection: 'row',
+    marginBottom: 12,
+  },
+  billedToColLeft: {
+    width: 40,
+  },
+  billedToColRight: {
+    flex: 1,
+  },
+  labelTextBold: {
+    fontWeight: 'bold',
+    fontSize: 7,
+  },
+  contactText: {
+    fontSize: 6.5,
+    lineHeight: 1.3,
+  },
 
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold">Items</h2>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border p-2 text-left">Item</th>
-              <th className="border p-2 text-center">Filled</th>
-              <th className="border p-2 text-center">Empty</th>
-              <th className="border p-2 text-right">Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item, index) => (
-              <tr key={index}>
-                <td className="border p-2">{item.kg}</td>
-                <td className="border p-2 text-center">{item.filled}</td>
-                <td className="border p-2 text-center">{item.empty}</td>
-                <td className="border p-2 text-right">{item.price ? `${item.price} TK` : 'N/A'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+  // -- Table Section --
+  tableHeaderRow: {
+    flexDirection: 'row',
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#BFBFBF',
+    paddingBottom: 3,
+    marginBottom: 3,
+  },
+  tableRow: {
+    flexDirection: 'row',
+    marginBottom: 3,
+  },
+  tableColDescription: { width: '45%' },
+  tableColRate: { width: '20%', textAlign: 'right' },
+  tableColHours: { width: '15%', textAlign: 'right' },
+  tableColAmount: { width: '20%', textAlign: 'right' },
+  tableHeaderText: {
+    fontWeight: 'bold',
+    fontSize: 6.5,
+  },
+  tableCellText: {
+    fontSize: 6.5,
+  },
 
-      <div className="text-right">
-        <p><strong>Total Price:</strong> {sale.price} TK</p>
-        <p><strong>Paid:</strong> {sale.pay} TK</p>
-        <p><strong>Due:</strong> {sale.due} TK</p>
-      </div>
+  // -- Totals Section --
+  totalsRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  totalsColLabels: {
+    width: 60,
+    textAlign: 'right',
+    paddingRight: 5,
+  },
+  totalsColValues: {
+    width: 50,
+    textAlign: 'right',
+  },
+  totalsLabelBold: {
+    fontWeight: 600,
+  },
+  totalsTaxLabel: {
+    fontSize: 5.5,
+    color: '#333333',
+  },
+  totalsValueTotal: {
+    fontSize: 8,
+    fontWeight: 600,
+    marginTop: 2,
+  },
 
-      <div className="mt-4 text-center text-gray-500">
-        <p>Thank you for your business!</p>
-        <p>Generated by Your Company Name</p>
-      </div>
-    </div>
-  );
+  // -- Footer Section (Payment + Studio Info) --
+  footerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    bottom: 15, // Pinned higher for A6
+    left: 20,
+    right: 20,
+    borderTopWidth: 0.5,
+    borderTopColor: '#BFBFBF',
+    paddingTop: 8,
+  },
+  footerColumn: {
+    width: '48%',
+  },
+  footerTitle: {
+    fontWeight: 'bold',
+    fontSize: 6,
+    marginBottom: 2,
+  },
+  footerDetails: {
+    fontSize: 5.5,
+    lineHeight: 1.2,
+  },
+  footerDetailsBold: {
+    fontSize: 6,
+    fontWeight: 'bold',
+    marginBottom: 1,
+  }
 });
 
-export default Invoice;
+const cylinderTypes = [
+  { label: '5KG', key: 'five_kg', emptyKey: 'empty_five_kg', priceKey: 'price_5_kg' },
+  { label: '12KG', key: 'twelve_kg', emptyKey: 'empty_twelve_kg', priceKey: 'price_12_kg' },
+  { label: '25KG', key: 'twentyfive_kg', emptyKey: 'empty_twentyfive_kg', priceKey: 'price_25_kg' },
+  { label: '33KG', key: 'thirtythree_kg', emptyKey: 'empty_thirtythree_kg', priceKey: 'price_33_kg' },
+  { label: '35KG', key: 'thirtyfive_kg', emptyKey: 'empty_thirtyfive_kg', priceKey: 'price_35_kg' },
+  { label: '45KG', key: 'fourtyfive_kg', emptyKey: 'empty_fourtyfive_kg', priceKey: 'price_45_kg' },
+  { label: 'Others', key: 'others_kg', emptyKey: 'empty_others_kg', priceKey: null },
+];
+const InvoiceA6 = ({ content }) => (
+  <Document>
+    {/* Change size to A6 here */}
+    <Page size="A6" style={styles.page}>
+
+      <View style={styles.headerRow}>
+        <View>
+          <Text style={styles.logoInvoice}>Invoice</Text> <br />
+         <Text style={styles.headline}>Mohammad Enterprise</Text>
+        </View>
+        <View style={styles.headerInfo}>
+          <Text style={styles.headerTextRegular}>{content?.date}</Text>
+          <Text style={styles.headerTextBold}>#{content?.id}</Text>
+        </View>
+      </View>
+
+      <View style={styles.line} />
+
+      <View style={styles.billedToRow}>
+        <View style={styles.billedToColLeft}>
+          <Text style={styles.labelTextBold}>Billed to:</Text>
+        </View>
+        <View style={styles.billedToColRight}>
+          <Text style={styles.contactText}>{content?.customer?.name}</Text>
+          <Text style={styles.contactText}>{content?.customer?.phone}</Text>
+          <Text style={styles.contactText}>{content?.customer?.address}</Text>
+        </View>
+      </View>
+
+      <View>
+        <View style={styles.tableHeaderRow}>
+          <Text style={[styles.tableColDescription, styles.tableHeaderText]}>Items</Text>
+          <Text style={[styles.tableColRate, styles.tableHeaderText]}>Qty</Text>
+          <Text style={[styles.tableColHours, styles.tableHeaderText]}> Price</Text>
+          <Text style={[styles.tableColAmount, styles.tableHeaderText]}>Total</Text>
+        </View>
+        {cylinderTypes.map((item, index) => {
+          const qty = Number(content?.[item.key]) || 0;
+          const emptyQty = Number(content?.[item.emptyKey]) || 0;
+          const price = item.priceKey ? Number(content?.[item.priceKey]) || 0 : 0;
+
+          if (!qty && !emptyQty) return null;
+
+          return (
+            <View style={styles.tableRow} key={index}>
+              <Text style={styles.tableColDescription}>{item.label}</Text>
+
+              <Text style={styles.tableColRate}>
+                {qty}/{emptyQty}
+              </Text>
+
+              <Text style={styles.tableColHours}>
+                {price}
+              </Text>
+
+              <Text style={styles.tableColAmount}>
+                {qty * price}
+              </Text>
+            </View>
+          );
+        })}
+
+
+
+      </View>
+
+      <View style={styles.totalsRow}>
+        <View style={styles.totalsColLabels}>
+          <Text style={styles.totalsValueTotal}>Total</Text>
+
+          <Text style={styles.totalsValueTotal}>Pay</Text>
+          <Text style={styles.totalsValueTotal}>Due</Text>
+        </View>
+        <View style={styles.totalsColValues}>
+          <Text style={styles.totalsValueTotal}>{content?.price}</Text>
+          <Text style={styles.totalsValueTotal}>{content?.pay}</Text>
+          <Text style={styles.totalsValueTotal}>{content?.due}</Text>
+        </View>
+      </View>
+
+      <View style={styles.footerContainer} fixed>
+        <View style={styles.footerColumn}>
+          <Text style={styles.footerTitle}>Payment Info</Text>
+          <Text style={styles.footerDetailsBold}>Studio Shodwe</Text>
+          <Text style={styles.footerDetails}>Acc: 0123 4567 8901</Text>
+        </View>
+
+        <View style={[styles.footerColumn, { textAlign: 'right' }]}>
+          <Text style={styles.footerDetailsBold}>Samira Hadid</Text>
+          <Text style={styles.footerDetails}>hello@site.com</Text>
+        </View>
+      </View>
+
+    </Page>
+  </Document>
+);
+
+export default InvoiceA6;

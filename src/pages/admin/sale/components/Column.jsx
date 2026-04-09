@@ -1,11 +1,10 @@
 import { Button } from '@/components/ui/button';
-import { ArrowUpDown, Edit, Printer, Trash } from 'lucide-react';
+import { ArrowUpDown, Edit, Trash } from 'lucide-react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useNavigate } from 'react-router-dom';
 import useStore from '@/store/Store';
-import { useRef } from 'react';
-import { useReactToPrint } from 'react-to-print';
-import Invoice from '@/components/Invoice';
+import PrintButton from '@/components/PrintButton';
+
 
 const columns = ({ constHandelDelete }) => [
   {
@@ -18,7 +17,7 @@ const columns = ({ constHandelDelete }) => [
     header: () => <div className='text-center'>Customer</div>,
     cell: ({ row }) => <div className='text-center'>{row.original.customer?.name || row.original.customer_name || 'N/A'}</div>,
   },
-    {
+  {
     accessorKey: 'five_kg',
     header: () => <div className='text-center'>5 KG</div>,
     cell: ({ row }) => {
@@ -147,31 +146,7 @@ const columns = ({ constHandelDelete }) => [
     cell: ({ row }) => {
       const { setSale } = useStore();
       const navigate = useNavigate();
-      const componentRef = useRef(null);
 
-      const handlePrint = useReactToPrint({
-        content: () => componentRef.current,
-        documentTitle: `Invoice_${row.original.id}`,
-        pageStyle: `
-          @page {
-            size: 105mm 297mm; /* Half A4 size */
-            margin: 10mm;
-          }
-          @media print {
-            body {
-              margin: 0;
-              padding: 0;
-            }
-            .invoice-container {
-              width: 105mm;
-              height: 297mm;
-              font-family: Arial, sans-serif;
-              padding: 10mm;
-              box-sizing: border-box;
-            }
-          }
-        `,
-      });
 
       const handleEdit = (data) => {
         setSale(data);
@@ -187,13 +162,17 @@ const columns = ({ constHandelDelete }) => [
             <ToggleGroupItem className='cursor-pointer' value='edit' aria-label='Edit row' onClick={() => handleEdit(row.original)}>
               <Edit width={20} height={20} />
             </ToggleGroupItem>
-            <ToggleGroupItem className='cursor-pointer' value='print' aria-label='Print Invoice' onClick={handlePrint}>
-              <Printer width={20} height={20} />
+            <ToggleGroupItem className='cursor-pointer' value='print' aria-label='Print Invoice'>
+             
+              <div >
+                <PrintButton
+                  content={row?.original}
+                />
+              </div>
+
             </ToggleGroupItem>
           </ToggleGroup>
-          <div style={{ display: 'none' }}>
-            <Invoice ref={componentRef} sale={row.original} />
-          </div>
+
         </div>
       );
     },
